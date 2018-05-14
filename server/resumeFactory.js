@@ -12,8 +12,8 @@ const getImage = filePath =>
   });
 
 const draw = (img, text) => {
-  var canvas = new Canvas(img.width, img.height);
-  var ctx = canvas.getContext("2d");
+  const canvas = new Canvas(img.width, img.height);
+  const ctx = canvas.getContext("2d");
   ctx.drawImage(img, 0, 0, img.width, img.height);
   ctx.font = "bold 60px Meiryo";
   ctx.fillText("Twitter TENSYOKU", 120, 140);
@@ -42,6 +42,4 @@ const resumeFactory = async text => {
   console.log("Done!!");
 };
 
-resumeFactory("Poop");
-
-// module.exports = resumeFactory;
+module.exports = resumeFactory;
