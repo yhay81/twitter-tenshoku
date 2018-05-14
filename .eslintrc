@@ -1,0 +1,27 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true,
+    "browser": true,
+    "jest": true
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-console": 0
+  },
+  "extends": [
+    "eslint:recommended",
+    "problems",
+    "plugin:vue/strongly-recommended",
+    "plugin:prettier/recommended"
+  ]
+}
