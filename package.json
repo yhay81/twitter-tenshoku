@@ -35,6 +35,7 @@
     "babel-preset-stage-0": "^6.0.15",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
+    "dotenv": "^5.0.1",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-problems": "^0.1.1",
