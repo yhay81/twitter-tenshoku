@@ -12,7 +12,8 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "precommit": "pretty-quick --staged",
-    "lint": "eslint --fix --ext .js --ext .vue ."
+    "lint": "eslint --fix --ext .js --ext .vue .",
+    "postinstall": "build"
   },
   "dependencies": {
     "canvas": "^1.6.10",

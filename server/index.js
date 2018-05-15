@@ -8,11 +8,16 @@ const resumeFactory = require("./resumeFactory");
 
 const passport = require("passport");
 const TwitterStrategy = require("passport-twitter");
-const {
+let {
   TWITTER_CONSUMER_KEY,
   TWITTER_CONSUMER_SECRET,
   BASE_URL
 } = require("./config");
+
+TWITTER_CONSUMER_KEY = TWITTER_CONSUMER_KEY || process.env.TWITTER_CONSUMER_KEY;
+TWITTER_CONSUMER_SECRET =
+  TWITTER_CONSUMER_SECRET || process.env.TWITTER_CONSUMER_SECRET;
+BASE_URL = BASE_URL || process.env.BASE_URL || "http://localhost:9000";
 
 const app = express();
 const PORT = process.env.PORT || 9000;
@@ -69,8 +74,10 @@ app.get(
 
 app.post("/api/", async (req, res) => {
   try {
-    await resumeFactory(req.body.text);
-    res.send("Okay");
+    const canvas = await resumeFactory(req.body.text);
+    res.setHeader("Content-Type", "image/png");
+    canvas.pngStream().pipe(res);
+    // res.status(200).send(JSON.stringify(canvas));
   } catch (err) {
     console.error("Error loading locations!", err);
     res.send(500, "Internal server error");
