@@ -13,7 +13,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "precommit": "pretty-quick --staged",
     "lint": "eslint --fix --ext .js --ext .vue .",
-    "postinstall": "npm build"
+    "postinstall": "yarn build"
   },
   "dependencies": {
     "canvas": "^1.6.10",
@@ -23,6 +23,7 @@
     "passport": "^0.4.0",
     "passport-twitter": "^1.0.4",
     "serve-static": "^1.13.2",
+    "twitter": "^1.7.1",
     "vue": "^2.5.11"
   },
   "devDependencies": {
