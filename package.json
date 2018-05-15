@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "canvas": "^1.6.10",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "morgan": "^1.9.0",
@@ -24,7 +25,8 @@
     "passport-twitter": "^1.0.4",
     "serve-static": "^1.13.2",
     "twitter": "^1.7.1",
-    "vue": "^2.5.11"
+    "vue": "^2.5.11",
+    "vue-session": "^1.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

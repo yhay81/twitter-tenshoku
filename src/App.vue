@@ -1,16 +1,24 @@
 <template>
   <div id="app">
-    Twitter TENSHOKU
-    <a v-if="!connected" href="/auth/twitter">Sign up/in with twitter</a>
-    <!-- <div v-if="connected && !haveResume"> -->
-    <div v-if="true">
-      <textarea v-model="message" placeholder="add multiple lines"></textarea>
-      <button v-on:click="getResume()">Creat Picture</button>
+    <header>
+    <h1>Twitter TENSHOKU</h1>
+    <div class="login">
+      <a v-if="!connected" href="/auth/twitter">Sign up/in with twitter</a>
+      <span v-if="connected" href="/auth/twitter">{{ userName }}</span>
     </div>
-    <div v-if="haveResume">
-      <img class="resume" :src="resume" >
-      <button>Tweet Resume</button>
-    </div>
+    </header>
+    <main>
+      <div>{{ $session.getAll() }}</div>
+      <!-- <div v-if="connected && !haveResume"> -->
+      <div v-if="true">
+        <textarea v-model="message" placeholder="add multiple lines"></textarea>
+        <button v-on:click="getResume()">Creat Picture</button>
+      </div>
+      <div v-if="haveResume">
+        <img class="resume" :src="resume" >
+        <button v-on:click="tweet()">Tweet Resume</button>
+      </div>
+    </main>
   </div>
 </template>
 
@@ -42,7 +50,8 @@ export default {
   data: () => ({
     connected: false,
     haveResume: false,
-    resume: ""
+    resume: "",
+    userName: ""
   }),
   computed: {
     connect: function() {
@@ -57,19 +66,57 @@ export default {
           this.haveResume = true;
         })
         .catch(error => console.error(error));
+    },
+    tweet: function() {
+      postData("/tweet/", { text: this.message })
+        .then(data => console.log(data))
+        .catch(error => console.error(error));
     }
   }
 };
 </script>
 
 <style>
-#app {
+body {
+  margin: 0;
+  background: rgb(153, 199, 230);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header {
+  display: flex;
+}
+
+h1 {
+  margin: 0;
+  padding: 10px;
+}
+
+.login {
+  margin: auto;
+}
+
+main {
   text-align: center;
 }
+
 .resume {
-  max-width: 500px;
+  max-width: 600px;
 }
-body {
-  background: rgb(153, 199, 230);
+
+button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+}
+
+header {
+  width: 100%;
+  background-color: white;
 }
 </style>
