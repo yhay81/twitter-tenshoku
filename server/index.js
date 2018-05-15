@@ -3,7 +3,17 @@ const express = require("express");
 const morgan = require("morgan");
 const path = require("path");
 const serveStatic = require("serve-static");
+const session = require("express-session");
 const resumeFactory = require("./resumeFactory");
+
+const passport = require("passport");
+const TwitterStrategy = require("passport-twitter");
+const {
+  TWITTER_CONSUMER_KEY,
+  TWITTER_CONSUMER_SECRET,
+  BASE_URL
+} = require("./config");
+
 const app = express();
 const PORT = process.env.PORT || 9000;
 
@@ -17,9 +27,45 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: true,
+    saveUninitialized: true
+  })
+);
 
 // Serve static assets
 app.use("/", serveStatic(path.join(__dirname, "..")));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// passport-twitterの初期化
+passport.use(
+  new TwitterStrategy(
+    {
+      consumerKey: TWITTER_CONSUMER_KEY, //TwitterのconsumerKey
+      consumerSecret: TWITTER_CONSUMER_SECRET, //TwitterのconsumerSecret
+      callbackURL: BASE_URL + "/auth/twitter/callback" //認証成功時の戻り先URL
+    },
+    (token, tokenSecret, profile, cb) => {
+      cb(profile);
+    }
+  )
+);
+
+app.get("/auth/twitter", passport.authenticate("twitter"));
+
+app.get(
+  "/auth/twitter/callback",
+  passport.authenticate("twitter", {
+    failureRedirect: "/"
+  }),
+  (req, res) => {
+    res.redirect("/");
+  }
+);
 
 app.post("/api/", async (req, res) => {
   try {
