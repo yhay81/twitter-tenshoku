@@ -61,3 +61,6 @@ typings/
 .next
 
 dist/
+
+server/config.js
+server/tenshoku_out.png
