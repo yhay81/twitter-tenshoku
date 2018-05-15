@@ -8,16 +8,10 @@ const resumeFactory = require("./resumeFactory");
 
 const passport = require("passport");
 const TwitterStrategy = require("passport-twitter").Strategy;
-let {
-  TWITTER_CONSUMER_KEY,
-  TWITTER_CONSUMER_SECRET,
-  BASE_URL
-} = require("./config");
 
-TWITTER_CONSUMER_KEY = TWITTER_CONSUMER_KEY || process.env.TWITTER_CONSUMER_KEY;
-TWITTER_CONSUMER_SECRET =
-  TWITTER_CONSUMER_SECRET || process.env.TWITTER_CONSUMER_SECRET;
-BASE_URL = BASE_URL || process.env.BASE_URL || "http://localhost:9000";
+const TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY;
+const TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET;
+const BASE_URL = process.env.BASE_URL || "http://localhost:9000";
 
 const app = express();
 const PORT = process.env.PORT || 9000;
