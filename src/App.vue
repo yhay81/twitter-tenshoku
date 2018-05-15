@@ -2,7 +2,8 @@
   <div id="app">
     Twitter TENSHOKU
     <a v-if="!connected" href="/auth/twitter">Sign up/in with twitter</a>
-    <div v-if="connected && !haveResume">
+    <!-- <div v-if="connected && !haveResume"> -->
+    <div v-if="true">
       <textarea v-model="message" placeholder="add multiple lines"></textarea>
       <button v-on:click="getResume()">Creat Picture</button>
     </div>

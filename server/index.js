@@ -7,7 +7,7 @@ const session = require("express-session");
 const resumeFactory = require("./resumeFactory");
 
 const passport = require("passport");
-const TwitterStrategy = require("passport-twitter");
+const TwitterStrategy = require("passport-twitter").Strategy;
 let {
   TWITTER_CONSUMER_KEY,
   TWITTER_CONSUMER_SECRET,
