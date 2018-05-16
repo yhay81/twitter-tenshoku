@@ -26,10 +26,10 @@ const draw = (img, text) => {
 const save = (canvas, filename) =>
   new Promise((resolve, reject) => {
     const string = canvas.toDataURL().split(",")[1];
-    const buffer = new Buffer(string, "base64");
+    const buffer = Buffer.from(string, "base64");
     fs.writeFile(filename, buffer, (err, data) => {
       if (err) reject(err);
-      resolve();
+      resolve(data);
     });
   });
 
@@ -39,7 +39,7 @@ const resumeFactory = async text => {
   const img = await getImage(base);
   const canvas = draw(img, text);
   await save(canvas, output);
-  console.log("Done!!");
+  return canvas;
 };
 
 module.exports = resumeFactory;
