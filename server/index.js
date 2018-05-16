@@ -4,12 +4,11 @@ const morgan = require("morgan");
 const path = require("path");
 const serveStatic = require("serve-static");
 const session = require("express-session");
-const resumeFactory = require("./resumeFactory");
+const resumeCanvas = require("./resumeCanvas");
 const url = require("url");
 const cookieParser = require("cookie-parser");
 const Twitter = require("twitter");
-const fs = require("fs");
-const Canvas = require("canvas");
+const twitterPost = require("./twitterPost");
 
 require("dotenv").config();
 
@@ -70,6 +69,9 @@ passport.use(
   )
 );
 
+// Serve static assets
+app.use("/", serveStatic(path.join(__dirname, "..")));
+
 app.get("/auth/twitter", passport.authenticate("twitter"));
 
 app.get(
@@ -82,21 +84,22 @@ app.get(
 
 app.get("/user", async (req, res) => {
   try {
-    res.send(200, req.user);
+    if (req.user) res.status(200).send(req.user);
+    res.status(200).send("No User");
   } catch (err) {
     console.error("Error loading locations!", err);
-    res.send(500, "Internal server error");
+    res.status(500).send("Internal server error");
   }
 });
 
 app.post("/api/", async (req, res) => {
   try {
-    const canvas = await resumeFactory(req.body.text);
+    const canvas = await resumeCanvas(req.body.text);
     res.setHeader("Content-Type", "image/png");
     canvas.pngStream().pipe(res);
   } catch (err) {
     console.error("Error loading locations!", err);
-    res.send(500, "Internal server error");
+    res.status(500).send("Internal server error");
   }
 });
 
@@ -112,28 +115,6 @@ app.get("/", (req, res) => {
   res.sendFile(p);
 });
 
-const getImage = filePath =>
-  new Promise((resolve, reject) => {
-    fs.readFile(filePath, (err, data) => {
-      if (err) reject(err);
-      const img = new Canvas.Image();
-      img.src = data;
-      resolve(img);
-    });
-  });
-
-const draw = (img, text) => {
-  const canvas = new Canvas(img.width, img.height);
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 0, img.width, img.height);
-  ctx.font = "bold 60px Meiryo";
-  ctx.fillText("Twitter TENSYOKU", 120, 140);
-  ctx.fillText(text, 120, 320);
-  const imagedata = ctx.getImageData(0, 0, img.width, img.height);
-  ctx.putImageData(imagedata, 0, 0);
-  return canvas;
-};
-
 app.post("/tweet/", async (req, res) => {
   const client = new Twitter({
     consumer_key: TWITTER_CONSUMER_KEY,
@@ -141,29 +122,10 @@ app.post("/tweet/", async (req, res) => {
     access_token_key: req.user.token,
     access_token_secret: req.user.tokenSecret
   });
-  const base = path.resolve(__dirname, "/tenshoku.png");
-  const img = await getImage(base);
-  const canvas = draw(img, req.body.text);
-  const string = canvas.toDataURL().split(",")[1];
-  client.post("statuses/update", {
-    Name: "test",
-    media_data: string
-  });
-  client
-    .post("statuses/update", {
-      Name: "test",
-      status: "Test from twitter api"
-    })
-    .then(tweet => {
-      console.log(tweet);
-    })
-    .catch(error => {
-      throw error;
-    });
-  res.send(200, "OK");
+  const canvas = await resumeCanvas(req.body.text);
+  const imgString = canvas.toDataURL().split(",")[1];
+  const result = await twitterPost(client, imgString, req.body.content);
+  res.status(200).send(result);
 });
-
-// Serve static assets
-app.use("/", serveStatic(path.join(__dirname, "..")));
 
 module.exports = app;
