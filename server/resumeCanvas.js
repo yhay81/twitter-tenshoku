@@ -1,3 +1,4 @@
+const path = require("path");
 const fs = require("fs");
 const Canvas = require("canvas");
 
@@ -23,23 +24,10 @@ const draw = (img, text) => {
   return canvas;
 };
 
-const save = (canvas, filename) =>
-  new Promise((resolve, reject) => {
-    const string = canvas.toDataURL().split(",")[1];
-    const buffer = Buffer.from(string, "base64");
-    fs.writeFile(filename, buffer, (err, data) => {
-      if (err) reject(err);
-      resolve(data);
-    });
-  });
-
-const resumeFactory = async text => {
-  const base = __dirname + "/tenshoku.png";
-  const output = __dirname + "/tenshoku_out.png";
-  const img = await getImage(base);
+const resumeCanvas = async text => {
+  const img = await getImage(path.resolve(__dirname, "tenshoku.png"));
   const canvas = draw(img, text);
-  await save(canvas, output);
   return canvas;
 };
 
-module.exports = resumeFactory;
+module.exports = resumeCanvas;
