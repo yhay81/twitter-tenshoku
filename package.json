@@ -47,7 +47,7 @@
     "husky": "^0.14.3",
     "prettier": "^1.12.1",
     "pretty-quick": "^1.4.1",
-    "vue-loader": "^13.0.5",
+    "vue-loader": "^15.9.3",
     "vue-template-compiler": "^2.4.4",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1"
