@@ -16,7 +16,7 @@
     "postinstall": "yarn build"
   },
   "dependencies": {
-    "canvas": "^1.6.10",
+    "canvas": "^1.6.11",
     "cookie-parser": "^1.4.3",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
